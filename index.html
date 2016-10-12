@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1",user-scalable=no>
+	<title></title>
+	<link rel="stylesheet" href="">
+	<script type="text/javascript" src="jquery-1.11.1.js"></script>
+	<style type="text/css" media="screen">
+		*{margin:0;padding:0;}
+		.headDiv{position: fixed;top:0;left: 0;color:white;line-height: 50px;background: #E4696B;text-align: center;width: 100%;z-index: 1;}
+		.start{position: absolute;top: 0;left: 0;width: 100%;height: 100%;background: rgba(0,0,0,0.8);}
+		.end{position: absolute;top: 0;left: 0;width: 100%;height: 100%;background: white;display: none;text-align: center;}
+		.end>h3{margin-top: 50%;text-align: center;color: #E4696B;}
+		.start>h3{margin-top: 50%;text-align: center;color: #E4696B;}
+		.start>div{padding:10px 0;font-size: 18px;width: 40%;background: #50DCFF;margin: 20px auto;text-align: center;color: white;}
+		.end>div{text-align: center;font-size: 20px;}
+		.end>div>span{font-weight: 700;color: #E4696B; }
+		.end>button{width: 30%;margin: 10px auto;}
+		ul{list-style: none;display: flex;flex-wrap: nowrap;margin-top: 1px;}
+		li{width:1px;margin-right:1px;flex-grow:1;background: #ccc;}
+		.goal{background: url(img/img1.png);background-size:cover;}
+		.mogu{background: url(img/xiong.jpg);background-size:cover;}
+		body{height: 100%}
+		.wrap{height:100%;display: flex;flex-direction: column-reverse;}
+		#time{position: absolute;right: 10%;font-weight: 600;color: #21BDD3;}
+	</style>
+</head>
+<body>
+	<div class="headDiv">一个腊鸡游戏<span id="time"></span></div>
+	<div class="wrap">
+	<ul>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+		</ul>
+		<ul class="Two">
+			<li></li>
+			<li></li>
+			<li class="goal"></li>
+			<li></li>
+		</ul>		
+	</div>
+	<div class="start">
+		<h3>准备好玩这个垃圾游戏了吗？</h3>
+		<div onclick="start()">开始游戏</div>
+	</div>
+	<div class="end">
+		<h3>游戏结束</h3>
+		<div>总共亲了卡酷辣酱<span id="count"></span>口</div>
+		<button onclick="playAgain()">再玩一次</button>
+	</div>
+</body>
+<script type="text/javascript">
+var results=0;
+var time;
+var timer;
+var interval;
+function start(){
+	results=0;
+	time=19;
+	$('#time').html(time);
+	$('.start').hide();
+	interval=setInterval(function(){
+		time--;
+		$('#time').html(time);
+},1000)
+	timer=setTimeout(function(){
+		$('.end').show();
+		$('#count').html(results)
+		clearInterval(interval)
+},20000);
+}
+function playAgain(){
+	results=0;
+	time=19;
+	$('#time').html(time);
+	$('.end').hide();
+	interval=setInterval(function(){
+		time--;
+		$('#time').html(time);
+},1000)		
+	timer=setTimeout(function(){
+		$('.end').show();
+		$('#count').html(results)
+		clearInterval(interval);
+},20000);
+}
+
+$('body').css('height',screen.height+"px");
+
+var liWidth=screen.width/4;
+var ulCount=Math.floor(screen.height/liWidth);//纵向的可以摆几个ul
+for(var i=0;i<ulCount-2;i++){
+	appendUl()
+}
+function appendUl(){
+	var randomNum=Math.floor(Math.random()*4)//0到3的随机数
+	var ulList=$('<ul><li></li><li></li><li></li><li></li></ul>')
+	$('.wrap').append(ulList);
+	$('ul').eq($('ul').length-1).find('li').eq(randomNum).attr('class','goal');
+	$('li').css('height',$('li').css('width'));
+}
+$('li').css('height',$('li').css('width'));
+//难点 动态生成的元素绑定事件用live，但新版jq不支持，改成如下
+$(document).on("click","li",function(){
+	if($(this).hasClass('goal')&&$(this).parent('ul').hasClass('Two')){
+		results++;
+	 	$(this).attr('class','mogu')
+	 	$(this).parent('ul').prev('ul').remove();
+	 	appendUl();
+	 	$(this).parent('ul').next('ul').attr('class','Two')
+	}else if($(this).attr('class')!="goal"){
+		$('.end').show();
+		$('#count').html(results)
+		clearTimeout(timer);
+		clearInterval(interval)
+	}
+})
+	 
+
+</script>
+</html>
