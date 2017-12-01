@@ -5,7 +5,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1",user-scalable=no>
 	<title></title>
 	<link rel="stylesheet" href="">
-	<script type="text/javascript" src="https://code.jquery.com/jquery-1.4.1.js"></script>
+	<script type="text/javascript" src="zepto.min.js"></script>
 	<style type="text/css" media="screen">
 		*{margin:0;padding:0;}
 		.headDiv{position: fixed;top:0;left: 0;color:white;line-height: 50px;background: #E4696B;text-align: center;width: 100%;z-index: 1;}
@@ -15,8 +15,8 @@
 		.start>h3{margin-top: 50%;text-align: center;color: #E4696B;}
 		.start>div{padding:10px 0;font-size: 18px;width: 40%;background: #50DCFF;margin: 20px auto;text-align: center;color: white;}
 		.end>div{text-align: center;font-size: 20px;}
+		.end>.endtap{width: 30%;margin: 10px auto;background: #50DCFF;color: white;padding: 10px;}
 		.end>div>span{font-weight: 700;color: #E4696B; }
-		.end>button{width: 30%;margin: 10px auto;}
 		ul{list-style: none;display: flex;flex-wrap: nowrap;margin-top: 1px;}
 		li{width:1px;margin-right:1px;flex-grow:1;background: #ccc;}
 		.goal{background: url(img/img1.png);background-size:cover;}
@@ -44,12 +44,12 @@
 	</div>
 	<div class="start">
 		<h3>准备好玩这个垃圾游戏了吗？</h3>
-		<div onclick="start()">开始游戏</div>
+		<div class="startap">开始游戏</div>
 	</div>
 	<div class="end">
 		<h3>游戏结束</h3>
 		<div>总共亲了卡酷辣酱<span id="count"></span>口</div>
-		<button onclick="playAgain()">再玩一次</button>
+		<div class="endtap">再玩一次</div>
 	</div>
 </body>
 <script type="text/javascript">
@@ -57,6 +57,8 @@ var results=0;
 var time;
 var timer;
 var interval;
+$('.startap').on('tap',start)
+$('.endtap').on('tap',playAgain)
 function start(){
 	results=0;
 	time=19;
@@ -104,7 +106,7 @@ function appendUl(){
 }
 $('li').css('height',$('li').css('width'));
 //难点 动态生成的元素绑定事件用live，但新版jq不支持，改成如下
-$(document).on("click","li",function(){
+$(document).on("tap","li",function(){
 	if($(this).hasClass('goal')&&$(this).parent('ul').hasClass('Two')){
 		results++;
 	 	$(this).attr('class','mogu')
